@@ -1,5 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import * as cookie from 'cookie';
+import crypto from 'crypto';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
