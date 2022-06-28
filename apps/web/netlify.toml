@@ -1,7 +1,7 @@
 [build]
-  base = "apps/web"
-  command = "npx pnpm config set store-dir ./apps/web/node_modules/.pnpm-store && npx pnpm i && npx pnpm -r build"
-  publish = "build"
+  base = ""
+  command = "npx pnpm config set store-dir ./apps/web/node_modules/.pnpm-store && npx pnpm i && npx pnpm build"
+  publish = "apps/web/build"
 
 [build.environment]
   NODE_VERSION = "16"
