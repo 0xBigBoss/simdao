@@ -23,7 +23,7 @@
 			<div class="max-w-md">
 				<h1 class="text-5xl font-bold">DAOsim</h1>
 				<p class="py-6">
-					An open-source DAO simulator (after beta). Start by choosing a DAO to simulate a proposal.
+					An open-source (after beta) DAO simulator. Start by choosing a DAO to simulate a proposal.
 				</p>
 
 				<form on:submit|preventDefault={lookupDao} class="w-full">
