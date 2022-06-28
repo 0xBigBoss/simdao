@@ -7,3 +7,6 @@
   NODE_VERSION = "16"
   NPM_VERSION = "6"
   NPM_FLAGS = "--prefix=/dev/null"
+
+[functions]
+  node_bundler = "esbuild"
