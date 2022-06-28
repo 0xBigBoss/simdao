@@ -9,11 +9,23 @@
 
 	// Inspired by https://svelte.dev/repl/810b0f1e16ac4bbd8af8ba25d5e0deff?version=3.4.2.
 	import { flip } from 'svelte/animate';
-
+	let lastChoiceName = '';
 	let votes = [
 		{
 			name: 'Undecided',
-			items: ['GrapeFruit', 'Orange', 'Pineapple', 'Banana', 'Apple']
+			items: [
+				'🍇 Grapes',
+				'🍊 Oranges',
+				'🍍 Pineapple',
+				'🍌 Banana',
+				'🍎 Apple',
+				'🍉 Watermelon',
+				'🍓 Strawberry',
+				'🍒 Cherries',
+				'🍅 Tomato',
+				'🍆 Eggplant',
+				'🍑 Peaches'
+			]
 		},
 		{
 			name: 'Yays',
@@ -39,17 +51,21 @@
 		event.preventDefault();
 		const json = event!.dataTransfer!.getData('text/plain');
 		const data = JSON.parse(json);
+		updateVote(data.choiceName, choiceName, data.itemIndex);
+	}
 
+	function updateVote(fromChoiceName: string, toChoiceName: string, itemIndex: number) {
 		// Remove the item from one basket.
 		// Splice returns an array of the deleted elements, just one in this case.
-		const newChoice = votes.find((v) => v.name === choiceName)!;
-		const oldChoice = votes.find((v) => v.name === data.choiceName)!;
-		const [item] = oldChoice!.items.splice(data.itemIndex, 1);
+		const newChoice = votes.find((v) => v.name === toChoiceName)!;
+		const oldChoice = votes.find((v) => v.name === fromChoiceName)!;
+		const [item] = oldChoice!.items.splice(itemIndex, 1);
 
 		// Add the item to the drop target basket.
 		newChoice!.items.push(item);
 		votes = votes;
 
+		lastChoiceName = toChoiceName;
 		hoveringOverBasket = null;
 	}
 </script>
@@ -66,10 +82,12 @@
 
 	<div class="py-5">
 		{#each votes.filter((v) => v.name === 'Undecided') as choice, choiceIndex (choice)}
-			<div animate:flip>
+			<div class="w-full flex-wrap" animate:flip>
 				<b>{choice.name}</b>
+				{#if lastChoiceName}<small>PROTIP: Double-click to add to <b>{lastChoiceName}</b></small
+					>{/if}
 				<ul
-					class="flex flex-row gap-4 border-2 border-gray-500 rounded-lg"
+					class="flex flex-row gap-4 border-2 border-gray-500 rounded-lg max-w-full flex-wrap"
 					class:hover:border-primary={hoveringOverBasket === choice.name}
 					on:dragenter={() => (hoveringOverBasket = choice.name)}
 					on:dragleave={() => (hoveringOverBasket = null)}
@@ -78,10 +96,12 @@
 				>
 					{#each choice.items as item, itemIndex (item)}
 						<li
-							class="block mr-2"
+							class="inline-block mr-2"
 							animate:flip
 							draggable={true}
 							on:dragstart={(event) => dragStart(event, choice.name, itemIndex)}
+							on:dblclick={() =>
+								lastChoiceName && updateVote(choice.name, lastChoiceName, itemIndex)}
 						>
 							<div>
 								{item}
@@ -105,7 +125,7 @@
 						<h3 class="w-full text-center"><b>{choice.name}</b></h3>
 					</div>
 					<ul
-						class="flex flex-col border-2 border-gray-500 rounded-lg"
+						class="flex flex-col border-2 border-gray-500 rounded-lg max-w-full"
 						class:hover:border-primary={hoveringOverBasket === choice.name &&
 							choice.items.length > 0}
 						on:dragenter={() => (hoveringOverBasket = choice.name)}
@@ -119,6 +139,8 @@
 								animate:flip
 								draggable={true}
 								on:dragstart={(event) => dragStart(event, choice.name, itemIndex)}
+								on:dblclick={() =>
+									lastChoiceName && updateVote(choice.name, lastChoiceName, itemIndex)}
 							>
 								<div>
 									{item}
@@ -153,6 +175,8 @@
 								animate:flip
 								draggable={true}
 								on:dragstart={(event) => dragStart(event, choice.name, itemIndex)}
+								on:dblclick={() =>
+									lastChoiceName && updateVote(choice.name, lastChoiceName, itemIndex)}
 							>
 								<div>
 									{item}
