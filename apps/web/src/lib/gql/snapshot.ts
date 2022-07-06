@@ -1,4 +1,4 @@
-const { request, gql } = await import('graphql-request');
+import { request, gql } from 'graphql-request';
 
 export type Proposal = {
 	id: string;
