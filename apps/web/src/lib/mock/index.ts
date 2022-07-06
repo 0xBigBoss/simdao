@@ -1,7 +1,38 @@
 const voters = [{}];
 
-import { request, gql } from 'graphql-request';
+let { request, gql } = await import('graphql-request');
 
+let getSpace = async (id) => {
+	const query = gql`
+		query getSpace($id: String!) {
+			space(id: $id) {
+				id
+				name
+				about
+				network
+				symbol
+				strategies {
+					name
+					network
+					params
+				}
+				admins
+				members
+				filters {
+					minScore
+					onlyMembers
+				}
+				plugins
+			}
+		}
+	`;
+
+	return await request('https://hub.snapshot.org/graphql', query, { id }).then((data) => {
+		console.log(data);
+		return data;
+	});
+};
+// get proposal
 (async () => {
 	const query = gql`
 		query {
