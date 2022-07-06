@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
 	export const prerender = true;
-
-	import '$lib/mock';
 </script>
 
 <script lang="ts">

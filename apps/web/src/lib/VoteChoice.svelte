@@ -1,26 +1,15 @@
 <script context="module" lang="ts">
-	export const prerender = true;
-
-	export type Voter = {
-		address: string;
-		name: string;
-		avatar: string;
-		influence: number;
-		power: number;
-	};
-
-	export type Choice = {
-		name: string;
-		voters: Voter[];
-	};
-
-	import '$lib/mock';
+	export const prerender = false;
 </script>
 
 <script lang="ts">
 	// Inspired by https://svelte.dev/repl/810b0f1e16ac4bbd8af8ba25d5e0deff?version=3.4.2.
 	import { flip } from 'svelte/animate';
 	import { Svrollbar } from 'svrollbar';
+	import jazzicon from '@metamask/jazzicon';
+	import { browser } from '$app/env';
+	import ExternalLinkIcon from 'heroicons/solid/external-link.svg?component';
+
 	let viewport: Element;
 	let contents: Element;
 	export let hoveringOverBasket: string | null;
@@ -32,6 +21,12 @@
 	export let onDragStart: (event: DragEvent, choiceName: string, voterIndex: number) => void;
 	export let updateVote: (fromChoiceName: string, toChoiceName: string, voterIndex: number) => void;
 	export let extraCssClassNames: string = '';
+
+	const getAvatar = (address: string) => {
+		if (browser) {
+			return jazzicon(100, parseInt(address.slice(2, 10), 16)).innerHTML;
+		} else null;
+	};
 </script>
 
 <div class="relative wrapper border-2 border-base-content  rounded-lg px-2">
@@ -58,11 +53,21 @@
 				>
 					<div class="avatar">
 						<div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-							<img src={voter.avatar} alt={voter.name} />
+							{#if voter.avatar}
+								<img src={voter.avatar} alt={voter.name} />
+							{:else}
+								{@html getAvatar(voter.address)}
+							{/if}
 						</div>
 					</div>
 					<div class="group-hover:text-white w-3/4 text-ellipsis overflow-hidden ">
 						{voter.name}
+						<a
+							href={`https://snapshot.org/#/profile/${voter.address}`}
+							target="_blank"
+							title={`${voter.name} Snapshot.org profile`}
+							><ExternalLinkIcon width={'1rem'} height={'1rem'} /></a
+						>
 					</div>
 					<div class="text-accent font-semibold flex justify-between gap-2 bg-inherit">
 						<div class="tooltip" data-tip="Voting power">
@@ -96,5 +101,9 @@
 
 	li {
 		@apply cursor-pointer;
+	}
+
+	.wrapper :global(svg) {
+		@apply inline-block;
 	}
 </style>

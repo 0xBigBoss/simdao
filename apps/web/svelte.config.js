@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-netlify';
 import preprocess from 'svelte-preprocess';
+import svelteSVG from 'vite-plugin-svelte-svg';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

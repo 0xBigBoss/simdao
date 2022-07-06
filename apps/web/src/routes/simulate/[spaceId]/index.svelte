@@ -1,30 +1,19 @@
 <script context="module" lang="ts">
-	export const prerender = true;
-
-	import '$lib/mock';
+	export const prerender = false;
 </script>
 
 <script lang="ts">
 	// Inspired by https://svelte.dev/repl/810b0f1e16ac4bbd8af8ba25d5e0deff?version=3.4.2.
 	import { flip } from 'svelte/animate';
 	import VoteChoice, { type Voter, type Choice } from '$lib/VoteChoice.svelte';
-	import { wordlist } from '$lib/mock/wordlists';
-	import { range, sample } from 'lodash';
 	import { getStores, navigating, page, session, updated } from '$app/stores';
+	import type { Proposal, Vote } from '$lib/gql/snapshot';
+
+	export let proposals: Record<string, Proposal>;
+	export let voterVotes: Record<string, Vote[]>;
+	export let voters: Voter[];
 
 	let lastChoiceName = '';
-	let voters: Voter[] = range(25)
-		.map(() => `${sample(wordlist)} ${sample(wordlist)}`)
-		.map(
-			(w: string): Voter => ({
-				address: `0x${w}`,
-				name: w,
-				avatar: `https://placeimg.com/128/128/any?t=${new Date().getTime() + Math.random()}`,
-				influence: parseInt((Math.random() * 15).toFixed(0)),
-				power: 1
-			})
-		)
-		.sort((a, b) => b.influence - a.influence);
 	let totalInfluence = voters.reduce((acc, voter) => acc + voter.influence, 0);
 	let choices: Choice[] = [
 		{
@@ -75,13 +64,13 @@
 </script>
 
 <svelte:head>
-	<title>DAOsim | Simulate Proposal {$page.params.dao}</title>
+	<title>DAOsim | Simulate Proposal {$page.params.spaceId}</title>
 	<meta name="description" content="A DAO proposal simulator app" />
 </svelte:head>
 
 <section class="max-w-4xl w-full m-auto">
 	<div class="card py-10">
-		<h1 class="text-4xl font-bold">Simulating Proposal: {$page.params.dao}</h1>
+		<h1 class="text-4xl font-bold">Simulating Proposal: {$page.params.spaceId}</h1>
 
 		<p>Drag addresses to yes or no to begin simulating.</p>
 	</div>
