@@ -133,7 +133,10 @@
 	<div class="py-5">
 		{#each choices.filter((v) => v.name === 'Undecided') as choice, choiceIndex (choice)}
 			<div class="w-full vote-choice-grid" animate:flip>
-				<h3 class="text-xl pb-4"><b>{choice.name}</b></h3>
+				<h3 class="text-xl pb-4">
+					<div class="badge">{choice.voters.length}</div>
+					<b>{choice.name}</b>
+				</h3>
 				{#if lastChoiceName}
 					<small>PROTIP: Double-click to add to <b>{lastChoiceName}</b></small>
 				{/if}
@@ -156,7 +159,10 @@
 			{#each choices.filter((v) => v.name === 'Yays') as choice, choiceIndex (choice)}
 				<div class="vote-choice-col grid flex-grow w-1/2" animate:flip>
 					<div>
-						<h3 class="w-full text-center text-xl pb-4"><b>{choice.name}</b></h3>
+						<h3 class="w-full text-center text-xl pb-4">
+							<div class="badge">{choice.voters.length}</div>
+							<b>{choice.name}</b>
+						</h3>
 					</div>
 					<VoteChoice
 						{choice}
@@ -176,7 +182,10 @@
 			{#each choices.filter((v) => v.name === 'Nays') as choice, choiceIndex (choice)}
 				<div class="vote-choice-col grid flex-grow w-1/2" animate:flip>
 					<div>
-						<h3 class="w-full text-center text-xl pb-4"><b>{choice.name}</b></h3>
+						<h3 class="w-full text-center text-xl pb-4">
+							<div class="badge">{choice.voters.length}</div>
+							<b>{choice.name}</b>
+						</h3>
 					</div>
 					<VoteChoice
 						{choice}

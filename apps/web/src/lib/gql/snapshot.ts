@@ -18,8 +18,8 @@ export type Vote = {
 
 export type Voter = {
 	address: string;
-	name: Promise<string>;
-	avatar: Promise<string>;
+	name: string;
+	avatar: string;
 	influence: number;
 	power: number;
 };
