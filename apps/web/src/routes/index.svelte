@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	let daoName = 'aave.eth';
+	let daoName = 'pokt-network';
 
 	const lookupDao = async () => {
 		window.location.href = '/simulate/' + daoName;
