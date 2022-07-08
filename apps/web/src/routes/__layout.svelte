@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Header from '$lib/header/Header.svelte';
+	import { Svrollbar } from 'svrollbar';
 	import '../app.css';
 </script>
 
@@ -7,6 +8,7 @@
 
 <main>
 	<slot />
+	<Svrollbar />
 </main>
 
 <footer>

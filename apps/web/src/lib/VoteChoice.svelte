@@ -86,14 +86,6 @@
 </div>
 
 <style lang="postcss">
-	.wrapper {
-		--svrollbar-track-width: 0.33rem;
-		--svrollbar-track-background: linear-gradient(45deg, hsl(var(--p)), hsl(var(--s)));
-		--svrollbar-thumb-width: 0.33rem;
-		--svrollbar-thumb-radius: 0;
-		--svrollbar-thumb-background: hsl(var(--bc));
-	}
-
 	:global(.v-scrollbar) {
 		@apply z-10;
 	}
