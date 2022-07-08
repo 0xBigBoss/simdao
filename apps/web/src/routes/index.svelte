@@ -21,7 +21,7 @@
 			<div class="max-w-md">
 				<h1 class="text-5xl font-bold">simDAO</h1>
 				<p class="py-6">
-					An open-source (after beta) simulator for DAO governance voting. Start by choosing a DAO
+					An open-source simulator for DAO governance voting. Start by choosing a DAO
 					to simulate a proposal. Enter the <a href="https://snapshot.org/" target="_blank"
 						>Snapshot.org</a
 					> space ID below.
