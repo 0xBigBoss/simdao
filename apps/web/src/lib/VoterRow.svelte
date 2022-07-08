@@ -33,7 +33,7 @@
 	<div class="tooltip" data-tip="Voting power">
 		{formatter.format(voter.power)}
 	</div>
-	<div class="tooltip tooltip-primary " data-tip="Influence over propsal">
+	<div class="tooltip tooltip-primary " data-tip="Influence over proposal">
 		<span class="text-primary">
 			{formatter.format(voter.influence)}
 		</span>
