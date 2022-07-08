@@ -1,18 +1,48 @@
 import { groupBy } from 'lodash';
-import { getProposals, getProposalVotes, getUsers, type SnapshotUser } from './gql/snapshot';
+import {
+	getProposals,
+	getProposalVotes,
+	getSpace,
+	getUsers,
+	type SnapshotUser,
+	type Voter
+} from './gql/snapshot';
 import { truncateAddress } from './helpers/truncate-address';
+import snapshot from '@snapshot-labs/snapshot.js';
 
 /**
  * Calculate the influence of a users in a space based on past proposals.
  * @param spaceId - The Snapshot.org space ID to get the proposals for.
  */
 export async function simulate(spaceId: string) {
+	const { space } = await getSpace(spaceId);
+	if (!space) {
+		throw new Error(`Space ${spaceId} not found.`);
+	}
+
 	const result = await getProposals(spaceId);
 	const proposals = Object.fromEntries(result.proposals.map((proposal) => [proposal.id, proposal]));
 	const voterVotes = await Promise.all(
 		result.proposals.map(async (proposal) => {
 			const votes = await getProposalVotes(proposal.id);
-			return votes.votes.map((vote) => ({ ...vote, proposalId: proposal.id }));
+			// assign the voter scores to the proposal
+			const [snapShotScores] = await snapshot.utils.getScores(
+				spaceId,
+				space.strategies,
+				space.network,
+				votes.votes.map((v) => v.voter),
+				proposal.snapshot
+			);
+			const scores = Object.fromEntries(
+				Object.entries(snapShotScores).map(([voter, score]) => [voter.toLowerCase(), score])
+			);
+
+			return votes.votes.map((vote) => ({
+				...vote,
+				voter: vote.voter.toLowerCase(),
+				influence: scores[vote.voter.toLowerCase()] ?? 0,
+				proposalId: proposal.id
+			}));
 		})
 	)
 		.then((votes) => votes.flat())
@@ -48,16 +78,28 @@ export async function simulate(spaceId: string) {
 	// 		return acc;
 	// 	}, {});
 	// });
+	// get voting scores at latest block
 
-	const voters = Object.entries(voterVotes).map(
-		([voter, votes]): Voter => ({
-			address: voter,
-			name: snapshotUsers[voter]?.name ?? truncateAddress(voter),
-			avatar: snapshotUsers[voter]?.avatar ?? null,
-			influence: votes.length,
-			power: 1
-		})
+	const [snapShotScores] = await snapshot.utils.getScores(
+		spaceId,
+		space.strategies,
+		space.network,
+		Object.keys(voterVotes)
 	);
+	const scores = Object.fromEntries(
+		Object.entries(snapShotScores).map(([voter, score]) => [voter.toLowerCase(), score])
+	);
+	const voters = Object.entries(voterVotes)
+		.map(
+			([voter, votes]): Voter => ({
+				address: voter,
+				name: snapshotUsers[voter]?.name ?? truncateAddress(voter),
+				avatar: snapshotUsers[voter]?.avatar ?? null,
+				influence: votes.reduce((acc, vote) => acc + vote.influence, 0),
+				power: scores[voter] ?? 0
+			})
+		)
+		.filter((voter) => voter.power > 0);
 
 	return {
 		proposals,

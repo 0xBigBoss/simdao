@@ -14,6 +14,7 @@ export type Vote = {
 	voter: string;
 	created: number;
 	choice: string;
+	influence: number;
 };
 
 export type Voter = {
