@@ -1,6 +1,6 @@
 # simDAO monorepo
 
-An open-source (after beta) simulator for DAO governance voting.
+An open-source simulator for DAO governance voting.
 
 ### Utilities
 
