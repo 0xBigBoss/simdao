@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>DAOsim</title>
+	<title>simDAO | simulator for DAO governance voting</title>
 	<meta name="description" content="A DAO proposal simulator app" />
 </svelte:head>
 
@@ -19,9 +19,12 @@
 	<div class="hero min-h-screen bg-base-200">
 		<div class="hero-content text-center">
 			<div class="max-w-md">
-				<h1 class="text-5xl font-bold">DAOsim</h1>
+				<h1 class="text-5xl font-bold">simDAO</h1>
 				<p class="py-6">
-					An open-source (after beta) DAO simulator. Start by choosing a DAO to simulate a proposal.
+					An open-source (after beta) simulator for DAO governance voting. Start by choosing a DAO
+					to simulate a proposal. Enter the <a href="https://snapshot.org/" target="_blank"
+						>Snapshot.org</a
+					> space ID below.
 				</p>
 
 				<form on:submit|preventDefault={lookupDao} class="w-full">

@@ -89,7 +89,7 @@
 </script>
 
 <svelte:head>
-	<title>DAOsim | Simulate Proposal {$page.params.spaceId}</title>
+	<title>simDao | Simulate Proposal for {$page.params.spaceId}</title>
 	<meta name="description" content="A DAO proposal simulator app" />
 </svelte:head>
 
